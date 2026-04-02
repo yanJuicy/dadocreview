@@ -1,0 +1,24 @@
+# Python 관련 불필요한 자동 생성 파일들
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 가상환경 (이미 작성하신 venv 포함 여러 이름 대응)
+venv/
+.venv/
+env/
+ENV/
+
+# 환경 변수 (나중에 API 키 등을 넣을 파일 - 절대 올라가면 안 됨)
+.env
+
+# 데이터베이스 (SQLite 사용 시 생기는 DB 파일)
+*.db
+*.sqlite3
+
+# 에디터 설정 (VS Code 등)
+.vscode/
+.idea/
+
+# 로그 파일
+*.log
