@@ -7,12 +7,17 @@
 """
 
 from app import crud
-from fastapi import Depends
+from fastapi import Depends, Request
 from sqlalchemy.orm import Session
 from app import schemas
 from fastapi import FastAPI
 from .database import engine, SessionLocal
 from . import models
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
+templates = Jinja2Templates(directory="app/templates")
 
 
 def get_db():
@@ -27,11 +32,18 @@ def get_db():
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "Dadoc Review!"}
+@app.get("/", response_class=HTMLResponse)
+def read_root(request: Request):
+    return templates.TemplateResponse(request, "index.html")
+
+
+@app.get("/results", response_class=HTMLResponse)
+def read_results(request: Request, q: str = None):
+    # q는 검색창에 입력한 키워드(ex: /results?q=파이썬)
+    return templates.TemplateResponse(request, "results.html", {"keyword": q})
 
 
 @app.post("/books", response_model=schemas.Book)

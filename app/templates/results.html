@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도도리 - 검색 결과</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo"><a href="/" style="text-decoration: none; color: inherit;">🐿️ 도도리</a></div>
+        </header>
+
+        <section class="search-info">
+            <p><strong>'{{ keyword }}'</strong>에 대한 검색 결과입니다.</p>
+        </section>
+
+        <!-- 실제 도서 목록이 나열될 영역 -->
+        <main class="results-list" id="resultsList">
+            <!-- 샘플 카드 (나중에 JS로 동적 생성) -->
+            <div class="book-card">
+                <div class="book-info">
+                    <h3 class="book-title">보여줄 책 제목</h3>
+                    <p class="book-author">저자 이름</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

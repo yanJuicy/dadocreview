@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도도리 - 도서관 도서 리뷰</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 상단 헤더 & 로고 -->
+        <header class="header">
+            <div class="logo">🐿️ 도도리</div>
+        </header>
+
+        <!-- 검색 섹션 -->
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="책 제목, 저자 또는 ISBN을 검색해보세요">
+                <button id="searchBtn">🔍</button>
+            </div>
+        </section>
+
+        <!-- 결과 목록 영역 (JS로 채워질 곳) -->
+        <main class="results-area" id="resultsArea">
+            <!-- 데이터가 없을 때의 초기 상태 -->
+            <div class="empty-state">
+                <p>알고 싶은 책을 검색해 보세요!</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- JS 로직은 나중에 사용자님이 직접! -->
+    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+</body>
+
+</html>
