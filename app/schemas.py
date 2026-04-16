@@ -25,3 +25,15 @@ class Book(BaseModel):
     kyobo_link: str
     yes24_link: str
     aladin_link: str
+
+
+class Review(BaseModel):
+    id: int
+    book_id: int
+    rating: int
+    content: str
+    source_url: str
+    source_site: str
+
+    class Config:
+        from_attributes = True

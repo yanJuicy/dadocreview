@@ -13,8 +13,10 @@ from sqlalchemy.orm import sessionmaker
 # 1. DB 파일 위치
 SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 
-#2. DB 엔진 생성
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+# 2. DB 엔진 생성
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
 
 # 3. 데이터 작업을 실행할 세션 클래스
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
