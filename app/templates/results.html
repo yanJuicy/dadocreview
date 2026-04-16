@@ -21,12 +21,20 @@
         <!-- 실제 도서 목록이 나열될 영역 -->
         <main class="results-list" id="resultsList">
             <!-- 샘플 카드 (나중에 JS로 동적 생성) -->
+            {% if books %}
+            {% for book in books %}
             <div class="book-card">
+                <img src="{{ book.cover_image_url }}" alt="{{ book.title }}" style="width: 100px; height: auto;">
+
                 <div class="book-info">
-                    <h3 class="book-title">보여줄 책 제목</h3>
-                    <p class="book-author">저자 이름</p>
+                    <h3 class="book-title">{{ book.title }}</h3>
+                    <p class="book-author">{{ book.author }}</p>
                 </div>
             </div>
+            {% endfor %}
+            {% else %}
+            <p>죄송합니다. '{{ keyword }}'에 대한 검색 결과가 우리 DB에 없네요! 🐿️💦</p>
+            {% endif %}
         </main>
     </div>
 </body>

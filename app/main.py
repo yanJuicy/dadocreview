@@ -6,6 +6,7 @@
 3. 서버가 시작될 때 필요한 초기화 작업(DB 테이블 생성 등)을 수행합니다.
 """
 
+from app.services import naru_api
 from app import crud
 from fastapi import Depends, Request
 from sqlalchemy.orm import Session
@@ -41,9 +42,17 @@ def read_root(request: Request):
 
 
 @app.get("/results", response_class=HTMLResponse)
-def read_results(request: Request, q: str = None):
+def read_results(request: Request, q: str = None, db: Session = Depends(get_db)):
     # q는 검색창에 입력한 키워드(ex: /results?q=파이썬)
-    return templates.TemplateResponse(request, "results.html", {"keyword": q})
+
+    external_books = naru_api.fetch_books_from_naru(q)
+    print(external_books)
+
+    books = crud.search_books_by_title(db=db, title=q)
+
+    return templates.TemplateResponse(
+        request, "results.html", {"keyword": q, "books": external_books}
+    )
 
 
 @app.post("/books", response_model=schemas.Book)
