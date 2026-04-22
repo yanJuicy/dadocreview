@@ -6,7 +6,6 @@
 3. API 키 관리(환경변수 활용) 및 통신 예외 처리를 담당합니다.
 """
 
-
 import os
 import requests
 from dotenv import load_dotenv
@@ -16,9 +15,9 @@ NARU_API_KEY = os.getenv("NARU_API_KEY")
 
 
 def fetch_books_from_naru(keyword: str):
-    url = f"http://data4library.kr/api/srchBooks?authKey={NARU_API_KEY}&format=json&keyword={keyword}"
+    url = f"http://data4library.kr/api/srchBooks?authKey={NARU_API_KEY}&format=json&title={keyword}"
     response = requests.get(url)
-    data =  response.json()
+    data = response.json()
 
     raw_docs = data.get("response", {}).get("docs", [])
 
@@ -30,12 +29,9 @@ def fetch_books_from_naru(keyword: str):
             "title": doc.get("bookname"),
             "author": doc.get("authors"),
             "isbn": doc.get("isbn13"),
-            "cover_image_url": doc.get("bookImageURL")
+            "cover_image_url": doc.get("bookImageURL"),
         }
 
         books.append(refiend_book)
 
-    
     return books
-
-

@@ -23,23 +23,32 @@ def search_books_by_title(db: Session, title: str):
     return result.scalars().all()
 
 
-def create_book(db: Session, book: schemas.Book):
+# app/crud.py 내부의 create_book 수정 방향
+def create_book(db: Session, book_data: dict):  # schemas.Book 대신 dict로 받기
     db_book = Book(
-        title=book.title,
-        author=book.author,
-        isbn=book.isbn,
-        description=book.description,
-        cover_image_url=book.cover_image_url,
-        average_review_score=book.average_review_score,
-        review_count=book.review_count,
-        ai_review_pro=book.ai_review_pro,
-        ai_review_con=book.ai_review_con,
-        book_index=book.book_index,
-        kyobo_link=book.kyobo_link,
-        yes24_link=book.yes24_link,
-        aladin_link=book.aladin_link,
+        title=book_data.get("title"),
+        author=book_data.get("author"),
+        isbn=book_data.get("isbn"),
+        cover_image_url=book_data.get("cover_image_url"),
+        # 나머지 필드들도 .get()으로 처리하거나 기본값 설정
+        description=book_data.get("description", ""),
+        kyobo_link=book_data.get("kyobo_link", ""),
+        yes24_link=book_data.get("yes24_link", ""),
+        aladin_link=book_data.get("aladin_link", ""),
     )
+
     db.add(db_book)
     db.commit()
     db.refresh(db_book)
     return db_book
+
+
+def sync_books(db: Session, books_data: list):
+    for book in books_data:
+        isbn = book.get("isbn")
+
+        stmt = select(Book).where(Book.isbn == isbn)
+        existing_book = db.execute(stmt).scalar_one_or_none()
+
+        if not existing_book:
+            create_book(db, book)

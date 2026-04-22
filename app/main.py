@@ -46,12 +46,12 @@ def read_results(request: Request, q: str = None, db: Session = Depends(get_db))
     # q는 검색창에 입력한 키워드(ex: /results?q=파이썬)
 
     external_books = naru_api.fetch_books_from_naru(q)
-    print(external_books)
+    crud.sync_books(db, external_books)
 
     books = crud.search_books_by_title(db=db, title=q)
 
     return templates.TemplateResponse(
-        request, "results.html", {"keyword": q, "books": external_books}
+        request, "results.html", {"keyword": q, "books": books}
     )
 
 
