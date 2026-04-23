@@ -14,8 +14,7 @@ from . import schemas
 
 def read_book_by_id(db: Session, book_id):
     stmt = select(Book).where(Book.id == book_id)
-    result = db.execute(stmt)
-    return result
+    return db.execute(stmt).scalar_one_or_none()
 
 
 def search_books_by_title(db: Session, title: str):

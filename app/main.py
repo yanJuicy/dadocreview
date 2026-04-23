@@ -6,6 +6,7 @@
 3. 서버가 시작될 때 필요한 초기화 작업(DB 테이블 생성 등)을 수행합니다.
 """
 
+from app.services import scraper
 from app.services import naru_api
 from app import crud
 from fastapi import Depends, Request
@@ -58,3 +59,17 @@ def read_results(request: Request, q: str = None, db: Session = Depends(get_db))
 @app.post("/books", response_model=schemas.Book)
 def create_book(book: schemas.Book, db: Session = Depends(get_db)):
     return crud.create_book(db=db, book=book)
+
+
+@app.get("/books/{book_id}")
+def read_book(book_id: int, request: Request, db: Session = Depends(get_db)):
+    book = crud.read_book_by_id(db, book_id)
+    return templates.TemplateResponse(request, "book_detail.html", {"book": book})
+
+
+@app.get("/books/{book_id}/reviews")
+def read_book_reviews(book_id: int, db: Session = Depends(get_db)):
+    book = crud.read_book_by_id(db, book_id)
+    reviews = scraper.get_kyobo_reviews(book.isbn)
+    crud.sync_reviews(db, book_id, reviews)
+    return reviews
