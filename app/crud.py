@@ -5,6 +5,7 @@
 2. 비즈니스 로직과 DB 연동 로직을 분리하여 코드의 재사용성을 높입니다.
 """
 
+from app.models import Review
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from .models import Book
@@ -52,3 +53,31 @@ def sync_books(db: Session, books_data: list):
 
         if not existing_book:
             create_book(db, book)
+
+
+def sync_reviews(db: Session, book_id: str, reviews_data: list):
+
+    stmt = select(Book).where(Book.id == book_id)
+    find_book = db.execute(stmt).scalar_one_or_none()
+
+    if not find_book:
+        return
+
+    existing_review_ids = [review.source_review_id for review in find_book.reviews]
+
+    for review in reviews_data:
+        source_id = review.get("source_review_id", "")
+        if source_id in existing_review_ids:
+            continue
+
+        book_review = Review(
+            book_id=find_book.id,
+            rating=review.get("rating"),
+            content=review.get("content"),
+            source_url=review.get("source_url", ""),
+            source_site=review.get("source_site", ""),
+            source_review_id=review.get("source_review_id", ""),
+        )
+        db.add(book_review)
+
+    db.commit()

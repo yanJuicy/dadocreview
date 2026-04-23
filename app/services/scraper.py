@@ -42,7 +42,15 @@ def fetch_kyobo_book_reviews(kyobo_book_id):
     for r in reviews_raw:
         content = r.get("revwCntt")
         rating = r.get("revwRvgr")
-        reviews.append({"content": content, "rating": rating})
+        review_id = r.get("revwNum")  # 교보문고 고유 리뷰 번호
+        reviews.append(
+            {
+                "content": content,
+                "rating": rating,
+                "source_review_id": review_id,
+                "source_site": "kyobo",
+            }
+        )
 
     return reviews
 
