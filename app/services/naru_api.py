@@ -9,6 +9,7 @@
 import os
 import requests
 from dotenv import load_dotenv
+from requests.exceptions import HTTPError, Timeout
 
 load_dotenv()
 NARU_API_KEY = os.getenv("NARU_API_KEY")
@@ -16,8 +17,17 @@ NARU_API_KEY = os.getenv("NARU_API_KEY")
 
 def fetch_books_from_naru(keyword: str):
     url = f"http://data4library.kr/api/srchBooks?authKey={NARU_API_KEY}&format=json&title={keyword}"
-    response = requests.get(url)
-    data = response.json()
+    try:
+        response = requests.get(url, timeout=5)
+        response.raise_for_status()
+        data = response.json()
+    except HTTPError as e:
+        print(f"HTTP Error: {e}")
+        return []
+    except Timeout as e:
+        print(f"Timeout Error: {e}")
+        return []
+
 
     raw_docs = data.get("response", {}).get("docs", [])
 
