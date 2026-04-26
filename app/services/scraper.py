@@ -1,5 +1,7 @@
+from requests import request
 import requests
 from bs4 import BeautifulSoup
+from requests.exceptions import HTTPError, Timeout
 
 
 def get_kyobo_book_id(isbn):
@@ -10,7 +12,15 @@ def get_kyobo_book_id(isbn):
     params = {
         "keyword": isbn,
     }
-    response = requests.get(url, headers=headers, params=params)
+    try:
+        response = requests.get(url, headers=headers, params=params, timeout=5)
+        response.raise_for_status()
+    except HTTPError as e:
+        print(f"HTTP Error: {e}")
+        return None
+    except Timeout as e:
+        print(f"Timeout Error: {e}")
+        return None
 
     soup = BeautifulSoup(response.text, "html.parser")  # soup 준비
     for a_tag in soup.find_all("a", href=True):
@@ -18,6 +28,7 @@ def get_kyobo_book_id(isbn):
         if "https://product.kyobobook.co.kr/detail" in link:
             book_id = link.split("/")[-1]
             return book_id
+    return None
 
 
 def fetch_kyobo_book_reviews(kyobo_book_id):
@@ -34,7 +45,15 @@ def fetch_kyobo_book_reviews(kyobo_book_id):
     }
     url = f"https://product.kyobobook.co.kr/api/review/list"
 
-    response = requests.get(url, params=params, headers=headers)
+    try:
+        response = requests.get(url, params=params, headers=headers, timeout=5)
+        response.raise_for_status()
+    except HTTPError as e:
+        print(f"HTTP Error: {e}")
+        return []
+    except Timeout as e:
+        print(f"Timeout Error: {e}")
+        return []
 
     reviews_raw = response.json().get("data", {}).get("reviewList", [])
     reviews = []
@@ -57,6 +76,8 @@ def fetch_kyobo_book_reviews(kyobo_book_id):
 
 def get_kyobo_reviews(isbn):
     book_id = get_kyobo_book_id(isbn)
+    if book_id is None:
+        return []
     reviews = fetch_kyobo_book_reviews(book_id)
     return reviews
 
