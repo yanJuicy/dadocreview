@@ -6,6 +6,7 @@
 3. 서버가 시작될 때 필요한 초기화 작업(DB 테이블 생성 등)을 수행합니다.
 """
 
+from fastapi import HTTPException
 from app.services import scraper
 from app.services import naru_api
 from app import crud
@@ -45,6 +46,10 @@ def read_root(request: Request):
 @app.get("/results", response_class=HTMLResponse)
 def read_results(request: Request, q: str = None, db: Session = Depends(get_db)):
     # q는 검색창에 입력한 키워드(ex: /results?q=파이썬)
+    if not q or not q.strip():
+        return templates.TemplateResponse(
+            request, "results.html", {"keyword": q, "books": []}
+        )
 
     external_books = naru_api.fetch_books_from_naru(q)
     crud.sync_books(db, external_books)
@@ -64,12 +69,16 @@ def create_book(book: schemas.Book, db: Session = Depends(get_db)):
 @app.get("/books/{book_id}")
 def read_book(book_id: int, request: Request, db: Session = Depends(get_db)):
     book = crud.read_book_by_id(db, book_id)
+    if book is None:
+        raise HTTPException(status_code=404, detail="책을 찾을 수 없습니다")
     return templates.TemplateResponse(request, "book_detail.html", {"book": book})
 
 
 @app.get("/books/{book_id}/reviews")
 def read_book_reviews(book_id: int, db: Session = Depends(get_db)):
     book = crud.read_book_by_id(db, book_id)
+    if book is None:
+        raise HTTPException(status_code=404, detail="책을 찾을 수 없습니다")
     reviews = scraper.get_kyobo_reviews(book.isbn)
     crud.sync_reviews(db, book_id, reviews)
     return reviews
