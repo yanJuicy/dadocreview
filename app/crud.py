@@ -17,8 +17,8 @@ def read_book_by_id(db: Session, book_id):
     return db.execute(stmt).scalar_one_or_none()
 
 
-def search_books_by_title(db: Session, title: str):
-    stmt = select(Book).where(Book.title.contains(title))
+def search_books_by_title(db: Session, title: str, limit: int, offset: int):
+    stmt = select(Book).where(Book.title.contains(title)).offset(offset).limit(limit)
     result = db.execute(stmt)
     return result.scalars().all()
 

@@ -38,6 +38,15 @@
             <p>죄송합니다. '{{ keyword }}'에 대한 검색 결과가 우리 DB에 없네요! 🐿️💦</p>
             {% endif %}
         </main>
+
+        <!-- 페이지네이션 영역 -->
+        <div class="pagination" style="text-align: center; margin-top: 20px; padding-bottom: 40px;">
+            {% if page > 1 %}
+            <a href="/results?q={{ keyword }}&page={{ page - 1 }}" class="btn-page">이전</a>
+            {% endif %}
+            <span class="current-page" style="margin: 0 15px;">{{ page }} 페이지</span>
+            <a href="/results?q={{ keyword }}&page={{ page + 1 }}" class="btn-page">다음</a>
+        </div>
     </div>
 </body>
 

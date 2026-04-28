@@ -149,6 +149,7 @@ body {
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     word-break: break-all;
 }
@@ -273,6 +274,55 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 9. 페이지네이션 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    padding-bottom: 50px;
+    width: 100%;
+}
+
+.btn-page {
+    display: inline-block;
+    padding: 8px 20px;
+    background-color: #FFFFFF;
+    color: #333333;
+    border: 1px solid #EEEEEE;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.btn-page:hover {
+    background-color: #FDFBF7;
+    border-color: #D2B48C; /* 도도리 시그니처 갈색 계열 */
+    color: #8B4513;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.current-page {
+    font-size: 14px;
+    font-weight: 700;
+    color: #666666;
+    margin: 0 20px;
+    background: #F0F0F0;
+    padding: 6px 12px;
+    border-radius: 10px;
 }
