@@ -1,0 +1,50 @@
+/* index.css: 메인 홈 페이지 전용 스타일 */
+.search-section {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    background-color: #FDFBF7;
+    padding: 15px 0;
+    z-index: 100;
+}
+
+.search-box {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    border-radius: 30px;
+    padding: 12px 22px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    align-items: center;
+    border: 1px solid #EEEEEE;
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    color: #333333;
+}
+
+.search-box input::placeholder {
+    color: #BBBBBB;
+}
+
+.search-box button {
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px;
+}
+
+.empty-state {
+    text-align: center;
+    color: #999999;
+    margin-top: 120px;
+    line-height: 1.6;
+}

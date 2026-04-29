@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>도도리 - {{ book.title }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/book_detail.css') }}">
 </head>
 
 <body>
@@ -21,10 +22,25 @@
                 <div class="detail-info">
                     <h1 class="detail-title">{{ book.title }}</h1>
                     <p class="detail-author">{{ book.author }}</p>
+                    <div class="detail-meta">
+                        <span>{{ book.publisher }}</span>
+                        <span>{{ book.publication_year }}</span>
+                        <span>누적 대출: {{ book.loan_count }}회</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- 2. 리뷰 수집 버튼 (클릭 시 서버의 sync 경로로 요청을 보냅니다) -->
+            <!-- 2. 도서 소개 섹션 (확장됨) -->
+            {% if book.description %}
+            <section class="detail-section">
+                <h3>도서 소개</h3>
+                <p class="detail-description">
+                    {{ book.description | safe }}
+                </p>
+            </section>
+            {% endif %}
+
+            <!-- 3. 리뷰 수집 버튼 -->
             {% if not book.reviews %}
             <form id="review-fetch-form" data-book-id="{{book.id}}">
                 <button type="submit" class="fetch-review-btn">
@@ -33,7 +49,7 @@
             </form>
             {% endif %}
 
-            <!-- 3. 리뷰 목록 영역 -->
+            <!-- 4. 리뷰 목록 영역 -->
             <section class="review-section">
                 <h3>독자들의 생생한 리뷰</h3>
                 <div id="review-list" class="review-list">
@@ -51,7 +67,6 @@
                     </div>
                     {% endif %}
                 </div>
-
             </section>
         </main>
     </div>
