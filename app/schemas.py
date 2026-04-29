@@ -15,6 +15,9 @@ class Book(BaseModel):
     title: str
     author: str
     isbn: str
+    publisher: Optional[str] = None
+    publication_year: Optional[str] = None
+    loan_count: Optional[int] = 0
     description: str
     cover_image_url: Optional[str] = None
     average_review_score: Optional[float] = None

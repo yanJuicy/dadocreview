@@ -29,6 +29,9 @@ def create_book(db: Session, book_data: dict):  # schemas.Book 대신 dict로 �
         title=book_data.get("title"),
         author=book_data.get("author"),
         isbn=book_data.get("isbn"),
+        publisher=book_data.get("publisher"),
+        publication_year=book_data.get("publication_year"),
+        loan_count=book_data.get("loan_count", 0),
         cover_image_url=book_data.get("cover_image_url"),
         # 나머지 필드들도 .get()으로 처리하거나 기본값 설정
         description=book_data.get("description", ""),

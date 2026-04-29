@@ -35,13 +35,16 @@ def fetch_books_from_naru(keyword: str, page_no = 1, page_size = 10):
     for item in raw_docs:
         doc = item.get("doc")
 
-        refiend_book = {
+        refined_book = {
             "title": doc.get("bookname"),
             "author": doc.get("authors"),
+            "publisher": doc.get("publisher"),
+            "publication_year": doc.get("publication_year"),
             "isbn": doc.get("isbn13"),
             "cover_image_url": doc.get("bookImageURL"),
+            "loan_count": doc.get("loan_count"),
         }
 
-        books.append(refiend_book)
+        books.append(refined_book)
 
     return books
