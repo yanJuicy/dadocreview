@@ -60,15 +60,15 @@
    - `naru_api.py`: 외부 API 호출 타임아웃(5s) 및 `try-except` 방어 로직 적용
    - `scraper.py`: `None` 체크(Guard Clause) 및 스크래핑 실패 시 빈 리스트 반환
    - `main.py`: 빈 검색어 유효성 검사, 존재하지 않는 도서 404 `HTTPException` 처리
-2. **프론트엔드 안정화 (미착수)**
+2. **프론트엔드 안정화 (2026-04-27 완료 ✅)**
    - `main.js`: 검색어 `encodeURIComponent` 적용, `trim()` 공백 제거
    - `book_detail.js`: 전역 변수 오염 방지(`const`/`let`), `fetch` 에러 핸들링
-3. **검색 결과 페이지네이션 (미착수)**
+3. **검색 결과 페이지네이션 (2026-04-28 완료 ✅)**
    - 정보나루 API `pageNo`/`pageSize` 파라미터 활용
-4. **상세 페이지 콘텐츠 보강 (미착수)**
-   - ISBN, 설명, 외부 서점 링크 표시
-5. **UI/UX 디자인 개선 (미착수)**
-   - CSS 변수 체계 도입, Google Fonts, 반응형 대응
+4. **상세 페이지 콘텐츠 보강 (2026-04-29 완료 ✅)**
+   - ISBN, 설명, 외부 서점 링크 및 출판사, 대출 횟수 표시
+5. **UI/UX 디자인 개선 (2026-04-29 완료 ✅)**
+   - 페이지별 CSS 파일 모듈화(`common`, `index`, `results`, `detail`) 및 레이아웃 개선
 
 ## 4. 기능 및 기술 스택 (Features & Tech Stack)
 
