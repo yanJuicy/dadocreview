@@ -71,9 +71,10 @@ class Library(Base):
     address = Column(String)
     phone = Column(String)
     closed_days_info = Column(String)
-    library_code = Column(String, index=True)
     latitude = Column(Float)
     longitude = Column(Float)
+    lib_code = Column(String)
+    homepage = Column(String)
 
     # "이 도서관이 보유한 책들"을 연결 장부를 통해 가져옵니다. (N:N)
     books = relationship("Book", secondary=book_library, back_populates="libraries")

@@ -81,3 +81,11 @@ def read_book_reviews(book_id: int, db: Session = Depends(get_db)):
     reviews = scraper.get_kyobo_reviews(book.isbn)
     crud.sync_reviews(db, book_id, reviews)
     return reviews
+
+
+@app.get("/api/libraries")
+def search_libraries(request: Request, q: str = None, db: Session = Depends(get_db)):
+    if not q or not q.strip():
+        return []
+    libraries = crud.search_libraries(db, q)
+    return libraries

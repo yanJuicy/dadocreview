@@ -5,6 +5,7 @@
 2. 비즈니스 로직과 DB 연동 로직을 분리하여 코드의 재사용성을 높입니다.
 """
 
+from app.models import Library
 from app.models import Review
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -83,3 +84,10 @@ def sync_reviews(db: Session, book_id: str, reviews_data: list):
         db.add(book_review)
 
     db.commit()
+
+
+
+def search_libraries(db: Session, library_name: str):
+    stmt = select(Library).where(Library.name.contains(library_name))
+    result = db.execute(stmt)
+    return result.scalars().all()
