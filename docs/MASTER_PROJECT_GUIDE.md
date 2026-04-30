@@ -24,6 +24,11 @@
 
 > 🔗 **상세 설계 문서:** [02. 하이브리드 검색 시스템 (UML)](/docs/UML_02_HYBRID_SEARCH_LOGIC.md)
 
+### 2.2 도서관 연동 및 실시간 대출 조회 흐름 (Library Integration Flow)
+사용자 맞춤형(localStorage) 및 위치 기반(Geolocation) 도서관 소장 여부 확인 로직입니다. 사용자의 검색 결과를 실제 행동(대출)으로 즉각 연결하는 핵심 파이프라인입니다.
+
+> 🔗 **상세 설계 문서:** [05. 도서관 연동 시스템 (UML)](/docs/UML_05_LIBRARY_INTEGRATION.md)
+
 ### 2.2 기술적 의사결정 기록 (Design Rationale)
 
 #### Q: 왜 모든 책 데이터를 DB에 미리 저장하지 않고 검색 API를 사용하나요?
