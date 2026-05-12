@@ -15,7 +15,7 @@ load_dotenv()
 NARU_API_KEY = os.getenv("NARU_API_KEY")
 
 
-def fetch_books_from_naru(keyword: str, page_no = 1, page_size = 10):
+def fetch_books_from_naru(keyword: str, page_no=1, page_size=10):
     url = f"http://data4library.kr/api/srchBooks?authKey={NARU_API_KEY}&format=json&title={keyword}&pageNo={page_no}&pageSize={page_size}"
     try:
         response = requests.get(url, timeout=5)
@@ -27,7 +27,6 @@ def fetch_books_from_naru(keyword: str, page_no = 1, page_size = 10):
     except Timeout as e:
         print(f"Timeout Error: {e}")
         return []
-
 
     raw_docs = data.get("response", {}).get("docs", [])
 

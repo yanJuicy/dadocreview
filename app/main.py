@@ -44,7 +44,9 @@ def read_root(request: Request):
 
 
 @app.get("/results", response_class=HTMLResponse)
-def read_results(request: Request, q: str = None, page: int = 1, db: Session = Depends(get_db)):
+def read_results(
+    request: Request, q: str = None, page: int = 1, db: Session = Depends(get_db)
+):
     if not q or not q.strip():
         return templates.TemplateResponse(
             request, "results.html", {"keyword": q, "page": 1, "books": []}
@@ -53,7 +55,7 @@ def read_results(request: Request, q: str = None, page: int = 1, db: Session = D
     external_books = naru_api.fetch_books_from_naru(q, page)
     crud.sync_books(db, external_books)
 
-    books = crud.search_books_by_title(db=db, title=q, limit=10, offset=(page-1)*10)
+    books = crud.search_books_by_title(db=db, title=q, limit=10, offset=(page - 1) * 10)
 
     return templates.TemplateResponse(
         request, "results.html", {"keyword": q, "page": page, "books": books}

@@ -86,7 +86,6 @@ def sync_reviews(db: Session, book_id: str, reviews_data: list):
     db.commit()
 
 
-
 def search_libraries(db: Session, library_name: str):
     stmt = select(Library).where(Library.name.contains(library_name))
     result = db.execute(stmt)
