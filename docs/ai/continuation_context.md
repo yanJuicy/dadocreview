@@ -1,6 +1,6 @@
 # 🤖 AI 세션 인수인계 문서 (Dodori Project Context)
 
-> **최종 갱신일시:** 2026-04-30
+> **최종 갱신일시:** 2026-05-12
 > **목적:** AI 세션 변경 시 백컨텍스트 유지 및 원활한 작업 재개
 > **저장소 위치:** `docs/ai/continuation_context.md` (새로운 AI 세션이 시작되면 가장 먼저 읽어볼 것)
 
@@ -30,50 +30,80 @@
     *   ✅ 상세 페이지 콘텐츠 보강 (출판사, 대출 횟수, 외부 서점 링크)
     *   ✅ UI/UX 개선 (CSS 4개 파일로 모듈화)
 *   **Step 4.5 완료 (2026-04-30) — 도서관 연동 백엔드 기반 구축:**
-    *   ✅ **도서관 연동 UML 설계 완료** (`docs/UML_05_LIBRARY_INTEGRATION.md`):
-        *   `localStorage` 기반 "나의 도서관" 설정 시나리오
-        *   검색 결과 페이지 비동기(fetch) 대출 가능 여부 조회 시나리오
-        *   상세 페이지 `Geolocation` API 기반 주변 도서관 조회 시나리오
-    *   ✅ **`Library` DB 모델 설계** (`app/models.py`): `lib_code`, `name`, `address`, `phone`, `latitude`, `longitude`, `homepage`, `closed_days_info` 컬럼 포함.
-    *   ✅ **전국 도서관 DB 마이그레이션 완료** (`scripts/import_libraries.py`):
-        *   정보나루 참여 도서관 목록 엑셀 파일 (`data/libraries.xlsx`) → SQLite 이관.
-        *   **1,594개 도서관** 데이터 저장 완료.
-        *   `pandas` + `openpyxl` 활용. `header=7` 옵션으로 헤더 파싱 이슈 해결.
-    *   ✅ **도서관 검색 API 구축** (`app/crud.py`, `app/main.py`):
-        *   `search_libraries(db, library_name)` 함수: `Library.name.contains()` 활용한 LIKE 검색.
-        *   `GET /api/libraries?q=검색어` 엔드포인트: 빈 검색어 방어 로직 포함.
+    *   ✅ **도서관 연동 UML 설계 완료** (`docs/UML_05_LIBRARY_INTEGRATION.md`)
+    *   ✅ **`Library` DB 모델 설계** (`app/models.py`)
+    *   ✅ **전국 도서관 DB 마이그레이션 완료** (`scripts/import_libraries.py`): 1,594개 도서관 저장.
+    *   ✅ **도서관 검색 API 구축** (`GET /api/libraries?q=검색어`)
+*   **Step 4.5+ 진행 중 (2026-05-12) — Yes24 리뷰 수집 엔진 구축:**
+    *   ✅ **ISBN 기반 Yes24 상품 ID 추출** (`fetch_yes24_goods_id`): 검색 결과에서 `class="gd_name"` 태그 분석하여 `goodsNo` 추출 성공.
+    *   ✅ **모바일 리뷰 엔드포인트 HTML 구조 분석 완료**: `m.yes24.com/Goods/ReviewList/{goods_id}` 경로의 `revwSet`, `total_rating_XX`, `revwCont` 클래스 구조 파악.
+    *   ✅ **봇 감지 대응 전략 수립**: Header Paradox 발견 — Yes24 PC 검색은 `User-Agent` 헤더 없이(기본값) 접근해야 정상 작동.
+    *   ⏳ **`fetch_yes24_review(goods_id)` 미구현**: 현재 `pass` 상태. 모바일 리뷰 파싱 로직 구현 필요.
+    *   ⏳ **`get_yes24_reviews(isbn)` 미구현**: 현재 `pass` 상태. 두 함수 연결만 하면 됨.
 
-## 3. 주요 기술적 의사결정 (Key Technical Decisions)
+## 3. 현재 코드 상태 (`app/services/scraper.py`)
 
+### ⚠️ 정리 필요 사항 (다음 세션 시작 시 먼저 처리)
+```
+- 106행: print(soup)  ← 디버깅용, 제거 필요
+- 112행: print(a_tag)  ← 디버깅용, 제거 필요
+- 87-89행: 주석 처리된 User-Agent 헤더 코드 → 정리 필요
+- 95행: 주석 처리된 이전 requests.get 호출 → 정리 필요
+```
+
+### 함수 구현 현황
+| 함수 | 역할 | 상태 |
+| :--- | :--- | :---: |
+| `get_kyobo_book_id(isbn)` | 교보 상품 ID 추출 | ✅ |
+| `fetch_kyobo_book_reviews(id)` | 교보 리뷰 JSON API 수집 | ✅ |
+| `get_kyobo_reviews(isbn)` | 교보 통합 함수 | ✅ |
+| `fetch_yes24_goods_id(isbn)` | Yes24 상품 ID 추출 | ✅ (디버그 print 잔존) |
+| `fetch_yes24_review(goods_id)` | Yes24 모바일 리뷰 파싱 | ❌ `pass` |
+| `get_yes24_reviews(isbn)` | Yes24 통합 함수 | ❌ `pass` |
+
+### `fetch_yes24_review` 구현을 위한 분석 완료 사항
+- **URL:** `https://m.yes24.com/Goods/ReviewList/{goods_id}?pageSize=10&pageNumber=1&sort_tp=2`
+- **헤더:** 모바일 `User-Agent` 필요 (`Mozilla/5.0 (iPhone; ...`)
+- **리뷰 컨테이너:** `<div class="revwSet" data-review-seq="...">`
+- **평점:** `<span class="total_rating total_rating_10">` → 클래스명에서 10점 만점 숫자 추출
+- **내용:** `<div class="revwCont">` 내부 텍스트
+- **제목:** `<div class="topTit">` 내부 텍스트
+
+## 4. 주요 기술적 의사결정 (Key Technical Decisions)
+
+*   **Yes24 헤더 전략 (2026-05-12 확립)**
+    *   Yes24 PC 검색 페이지는 `User-Agent`를 브라우저로 위장하면 오히려 메인 페이지로 리다이렉트됨.
+    *   `requests` 라이브러리 기본 헤더(python-requests)로 요청 시 정상 작동 확인.
+    *   → 교보문고(헤더 필요)와 Yes24(헤더 제거)처럼 **각 사이트별 개별 헤더 전략** 관리.
 *   **도서관 데이터 전략: 로컬 DB 선택 (2026-04-30 확립)**
-    *   정보나루 `libSrch` API는 이름 검색을 지원하지 않기 때문에, 전국 참여 도서관 목록 엑셀 파일을 최초 1회 파싱하여 SQLite에 저장(Seeding)하는 전략 채택.
-    *   **장점:** 외부 API 의존도 Zero → 검색 속도 극대화, 안정성 향상, 명 검색 자유.
 *   **PaaS:** Render.com (무기한 무료 유지).
-*   **Database:** SQLite (`sql_app.db`). Render에서 DB가 휘발성(배포 시 초기화)을 가짐을 인지. `import_libraries.py`를 Start Command에 연결하여 자동 재시딩하는 방식으로 대응 예정.
-*   **AI 리뷰 기능:** Gemini API가 아닌 **Hugging Face `transformers` 라이브러리 + 오픈소스 한국어 요약 모델(예: KoBART) 직접 구동** 방식으로 구현할 예정.
+*   **Database:** SQLite (`sql_app.db`).
+*   **AI 리뷰 기능:** Hugging Face `transformers` + 오픈소스 한국어 요약 모델(예: KoBART) 직접 구동 방식.
 
-## 4. 다음 세션(Next Session) 시작 위치
+## 5. 다음 세션(Next Session) 시작 위치
 
-> 일일 작업 로그는 `docs/daily/2026-04-30.md` 파일을 참조하세요.
+> 일일 작업 로그는 `docs/daily/2026-05-12.md` 파일을 참조하세요.
 
 ### 다음 세션에서 이어갈 작업 (우선순위 순):
 
-1.  **🔴 "나의 도서관" 프론트엔드 UI 구현** (가장 먼저!)
-    *   `index.html`(메인 화면)에 도서관 검색창 및 결과 목록 UI 추가.
-    *   사용자가 도서관을 선택하면 `localStorage`에 저장(`myLibraries: [{libCode, name}]`)하는 `main.js` 로직 구현.
-    *   선택된 "나의 도서관" 목록을 화면에 표시하고 삭제하는 기능 구현.
-2.  **🟡 검색 결과 페이지 — 대출 가능 여부 비동기 조회**
-    *   검색 결과(`results.html`) 렌더링 후, `localStorage`의 도서관 코드와 각 책의 ISBN을 백엔드로 보내 대출 가능 여부를 비동기로 조회하는 `fetch` 로직 추가 (`results.js`).
-    *   백엔드(`main.py`, `naru_api.py`)에 정보나루 `bookExist` API 연동 함수 추가.
-3.  **🟢 Render 배포 시 도서관 DB 자동 시딩 설정**
-    *   Render 대시보드의 `Start Command`를 `python -m scripts.import_libraries && uvicorn ...`으로 변경.
+1.  **🔴 `scraper.py` 코드 정리** (5분)
+    *   디버깅용 `print(soup)`, `print(a_tag)` 제거.
+    *   주석 처리된 헤더 관련 코드 정리.
+2.  **🔴 `fetch_yes24_review(goods_id)` 구현** (핵심 작업)
+    *   모바일 엔드포인트 호출 + BeautifulSoup 파싱.
+    *   위 섹션 3의 "구현을 위한 분석 완료 사항" 참조.
+    *   교보 함수(`fetch_kyobo_book_reviews`)와 동일한 반환 형식 유지: `[{"content": ..., "rating": ..., "source_review_id": ..., "source_site": "yes24"}]`
+3.  **🔴 `get_yes24_reviews(isbn)` 완성** (1분)
+    *   `fetch_yes24_goods_id` → `fetch_yes24_review` 연결.
+4.  **🟡 알라딘(Aladin) 리뷰 수집 채널 확장**
+5.  **🟡 "나의 도서관" 프론트엔드 UI 구현**
+6.  **🟢 AI 요약 기능 연동 (Step 5)**
 
-## 5. 다음 AI를 위한 행동 지침 (Instruction for Next AI)
+## 6. 다음 AI를 위한 행동 지침 (Instruction for Next AI)
 
-1.  이 파일(`continuation_context.md`)을 읽은 후 사용자에게 정중히 인사하며, **도서관 DB 구축 완료를 축하**하는 코멘트로 시작할 것.
-2.  **[필수]** 본격적인 코딩 시작 전, 오늘 배운 내용을 기반으로 **5문제짜리 워밍업 퀴즈를 출제**할 것. 범위: `pandas` 헤더 파싱, SQLAlchemy LIKE 검색, `localStorage` 개념, FastAPI 라우터 등. 결과는 `docs/QUIZ_LOG.md`에 기록.
-3.  첫 번째 작업은 **"나의 도서관" 메인 화면 UI 구현 (프론트엔드)**이다. `GET /api/libraries?q=...` 엔드포인트가 이미 준비되어 있으므로, 이를 `fetch`로 호출하는 `main.js` 로직과 UI 작성을 가이드할 것.
+1.  이 파일(`continuation_context.md`)을 읽은 후 사용자에게 정중히 인사하며, **Yes24 상품 ID 추출 성공과 봇 감지 해결을 축하**하는 코멘트로 시작할 것.
+2.  **[필수]** 본격적인 코딩 시작 전, 오늘 배운 내용을 기반으로 **5문제짜리 워밍업 퀴즈를 출제**할 것. 범위: BeautifulSoup 클래스 필터링, HTTP 헤더 역할, `requests` 기본 동작, CSS 클래스 기반 데이터 추출, 크롤링 윤리(robots.txt). 결과는 `docs/QUIZ_LOG.md`에 기록.
+3.  첫 번째 작업은 **`scraper.py` 디버깅 코드 정리 → `fetch_yes24_review` 구현**이다.
 4.  코드를 보여주지 말고 **방향과 논리만 안내**할 것.
 5.  사용자가 개념에 대해 깊이 있는 질문을 할 때, 비유를 활용하여 '왜 이렇게 해야 하는지'를 함께 전달할 것. 심화 토론 내용은 `docs/QNA_ARCHIVE.md`에 기록.
 6.  **[자동화 지침]** 세션 종료 시 이 파일을 업데이트하고, 즉시 커밋/푸시할 것.
-
