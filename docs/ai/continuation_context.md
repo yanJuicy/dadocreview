@@ -1,6 +1,6 @@
 # 🤖 AI 세션 인수인계 문서 (Dodori Project Context)
 
-> **최종 갱신일시:** 2026-05-12
+> **최종 갱신일시:** 2026-05-21
 > **목적:** AI 세션 변경 시 백컨텍스트 유지 및 원활한 작업 재개
 > **저장소 위치:** `docs/ai/continuation_context.md` (새로운 AI 세션이 시작되면 가장 먼저 읽어볼 것)
 
@@ -34,22 +34,16 @@
     *   ✅ **`Library` DB 모델 설계** (`app/models.py`)
     *   ✅ **전국 도서관 DB 마이그레이션 완료** (`scripts/import_libraries.py`): 1,594개 도서관 저장.
     *   ✅ **도서관 검색 API 구축** (`GET /api/libraries?q=검색어`)
-*   **Step 4.5+ 진행 중 (2026-05-12) — Yes24 리뷰 수집 엔진 구축:**
+*   **Step 4.5+ 완료 (2026-05-21) — Yes24 리뷰 수집 엔진 구축 및 안정화:**
     *   ✅ **ISBN 기반 Yes24 상품 ID 추출** (`fetch_yes24_goods_id`): 검색 결과에서 `class="gd_name"` 태그 분석하여 `goodsNo` 추출 성공.
-    *   ✅ **모바일 리뷰 엔드포인트 HTML 구조 분석 완료**: `m.yes24.com/Goods/ReviewList/{goods_id}` 경로의 `revwSet`, `total_rating_XX`, `revwCont` 클래스 구조 파악.
-    *   ✅ **봇 감지 대응 전략 수립**: Header Paradox 발견 — Yes24 PC 검색은 `User-Agent` 헤더 없이(기본값) 접근해야 정상 작동.
-    *   ⏳ **`fetch_yes24_review(goods_id)` 미구현**: 현재 `pass` 상태. 모바일 리뷰 파싱 로직 구현 필요.
-    *   ⏳ **`get_yes24_reviews(isbn)` 미구현**: 현재 `pass` 상태. 두 함수 연결만 하면 됨.
+    *   ✅ **Yes24 모바일 리뷰 수집 함수 구현 완료** (`fetch_yes24_review`):
+        *   날짜 수집 및 평점 추출(10점 만점 ➔ 5점 만점으로 변환) 적용 완료.
+        *   `NoneType` 요소를 조회할 때 생기는 `AttributeError` 예외 방지 (Null Check 방어 코드) 적용.
+        *   루프 반복 시 변수 초기화(`rating = None`, `date = None`, `content = None`) 적용하여 하단 더보기용 빈 스크립트 태그에 의한 데이터 중복 오염 버그 해결.
+    *   ✅ **클린 코드 작업**: `scraper.py` 내부의 미사용 import (`from requests import request`) 제거 완료.
+    *   ⏳ **`get_yes24_reviews(isbn)` 미구현**: 현재 `pass` 상태. 상품 ID 추출과 리뷰 조회를 연결하는 통합 작업 필요.
 
 ## 3. 현재 코드 상태 (`app/services/scraper.py`)
-
-### ⚠️ 정리 필요 사항 (다음 세션 시작 시 먼저 처리)
-```
-- 106행: print(soup)  ← 디버깅용, 제거 필요
-- 112행: print(a_tag)  ← 디버깅용, 제거 필요
-- 87-89행: 주석 처리된 User-Agent 헤더 코드 → 정리 필요
-- 95행: 주석 처리된 이전 requests.get 호출 → 정리 필요
-```
 
 ### 함수 구현 현황
 | 함수 | 역할 | 상태 |
@@ -57,17 +51,9 @@
 | `get_kyobo_book_id(isbn)` | 교보 상품 ID 추출 | ✅ |
 | `fetch_kyobo_book_reviews(id)` | 교보 리뷰 JSON API 수집 | ✅ |
 | `get_kyobo_reviews(isbn)` | 교보 통합 함수 | ✅ |
-| `fetch_yes24_goods_id(isbn)` | Yes24 상품 ID 추출 | ✅ (디버그 print 잔존) |
-| `fetch_yes24_review(goods_id)` | Yes24 모바일 리뷰 파싱 | ❌ `pass` |
+| `fetch_yes24_book_id(isbn)` | Yes24 상품 ID 추출 | ✅ |
+| `fetch_yes24_review(book_id)` | Yes24 모바일 리뷰 수집 및 안정적 파싱 | ✅ |
 | `get_yes24_reviews(isbn)` | Yes24 통합 함수 | ❌ `pass` |
-
-### `fetch_yes24_review` 구현을 위한 분석 완료 사항
-- **URL:** `https://m.yes24.com/Goods/ReviewList/{goods_id}?pageSize=10&pageNumber=1&sort_tp=2`
-- **헤더:** 모바일 `User-Agent` 필요 (`Mozilla/5.0 (iPhone; ...`)
-- **리뷰 컨테이너:** `<div class="revwSet" data-review-seq="...">`
-- **평점:** `<span class="total_rating total_rating_10">` → 클래스명에서 10점 만점 숫자 추출
-- **내용:** `<div class="revwCont">` 내부 텍스트
-- **제목:** `<div class="topTit">` 내부 텍스트
 
 ## 4. 주요 기술적 의사결정 (Key Technical Decisions)
 
@@ -82,28 +68,19 @@
 
 ## 5. 다음 세션(Next Session) 시작 위치
 
-> 일일 작업 로그는 `docs/daily/2026-05-12.md` 파일을 참조하세요.
-
 ### 다음 세션에서 이어갈 작업 (우선순위 순):
 
-1.  **🔴 `scraper.py` 코드 정리** (5분)
-    *   디버깅용 `print(soup)`, `print(a_tag)` 제거.
-    *   주석 처리된 헤더 관련 코드 정리.
-2.  **🔴 `fetch_yes24_review(goods_id)` 구현** (핵심 작업)
-    *   모바일 엔드포인트 호출 + BeautifulSoup 파싱.
-    *   위 섹션 3의 "구현을 위한 분석 완료 사항" 참조.
-    *   교보 함수(`fetch_kyobo_book_reviews`)와 동일한 반환 형식 유지: `[{"content": ..., "rating": ..., "source_review_id": ..., "source_site": "yes24"}]`
-3.  **🔴 `get_yes24_reviews(isbn)` 완성** (1분)
-    *   `fetch_yes24_goods_id` → `fetch_yes24_review` 연결.
-4.  **🟡 알라딘(Aladin) 리뷰 수집 채널 확장**
-5.  **🟡 "나의 도서관" 프론트엔드 UI 구현**
-6.  **🟢 AI 요약 기능 연동 (Step 5)**
+1.  **🔴 `get_yes24_reviews(isbn)` 완성** (5분)
+    *   `fetch_yes24_book_id(isbn)` ➔ `fetch_yes24_review(book_id)`를 연결하여 하나로 합치는 통합 함수 완성.
+2.  **🟡 알라딘(Aladin) 리뷰 수집 채널 확장**
+3.  **🟡 "나의 도서관" 프론트엔드 UI 구현**
+4.  **🟢 AI 요약 기능 연동 (Step 5)**
 
 ## 6. 다음 AI를 위한 행동 지침 (Instruction for Next AI)
 
-1.  이 파일(`continuation_context.md`)을 읽은 후 사용자에게 정중히 인사하며, **Yes24 상품 ID 추출 성공과 봇 감지 해결을 축하**하는 코멘트로 시작할 것.
-2.  **[필수]** 본격적인 코딩 시작 전, 오늘 배운 내용을 기반으로 **5문제짜리 워밍업 퀴즈를 출제**할 것. 범위: BeautifulSoup 클래스 필터링, HTTP 헤더 역할, `requests` 기본 동작, CSS 클래스 기반 데이터 추출, 크롤링 윤리(robots.txt). 결과는 `docs/QUIZ_LOG.md`에 기록.
-3.  첫 번째 작업은 **`scraper.py` 디버깅 코드 정리 → `fetch_yes24_review` 구현**이다.
-4.  코드를 보여주지 말고 **방향과 논리만 안내**할 것.
-5.  사용자가 개념에 대해 깊이 있는 질문을 할 때, 비유를 활용하여 '왜 이렇게 해야 하는지'를 함께 전달할 것. 심화 토론 내용은 `docs/QNA_ARCHIVE.md`에 기록.
+1.  이 파일(`continuation_context.md`)을 읽은 후 사용자에게 정중히 인사하며, **Yes24 모바일 리뷰 날짜/평점(5점 만점 환산) 추출 및 AttributeError 예외 안정화와 중복 저장 문제까지 깔끔하게 해결한 것**을 축하하는 코멘트로 시작할 것.
+2.  **[필수]** 본격적인 코딩 시작 전, 오늘 배운 내용(파이썬의 함수 스코프 범위와 변수 초기화의 중요성 등)을 기반으로 **5문제짜리 워밍업 퀴즈를 출제**할 것. 결과는 `docs/QUIZ_LOG.md`에 기록.
+3.  첫 번째 작업은 **`get_yes24_reviews(isbn)` 통합 구현**이다.
+4.  코드를 바로 짜기보다는 **설명과 가이드를 먼저 주고 주도적 코딩을 유도**할 것.
+5.  사용자가 개념에 대해 깊이 있는 질문을 할 때, 비유를 활용하여 설명할 것. 심화 토론 내용은 `docs/QNA_ARCHIVE.md`에 기록.
 6.  **[자동화 지침]** 세션 종료 시 이 파일을 업데이트하고, 즉시 커밋/푸시할 것.
