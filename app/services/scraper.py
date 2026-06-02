@@ -174,7 +174,11 @@ def fetch_yes24_review(book_id, pageSize=10, pageNumber=1):
 
 
 def get_yes24_reviews(isbn):
-    pass
+    book_id = fetch_yes24_book_id(isbn)
+    if book_id is None:
+        return []
+    reviews = fetch_yes24_review(book_id)
+    return reviews
 
 
 
