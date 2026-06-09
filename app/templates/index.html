@@ -1,40 +1,54 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>도도리 - 도서관 도서 리뷰</title>
+    <title>도도리 - 공공 도서관의 도서 리뷰</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', path='/css/common.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', path='/css/index.css') }}">
 </head>
 
 <body>
     <div class="app-container">
-        <!-- 상단 헤더 & 로고 -->
-        <header class="header">
-            <div class="logo">🐿️ 도도리</div>
+        <header>
+            <a href="/" class="logo">
+                <img src="{{ url_for('static', path='/images/logo.png') }}" alt="도도리 로고">
+                <span>도도리</span>
+            </a>
+            <p class="logo-subtitle">공공 도서관의 도서 리뷰</p>
         </header>
-
-        <!-- 검색 섹션 -->
-        <section class="search-section">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="책 제목, 저자 또는 ISBN을 검색해보세요">
-                <button id="searchBtn">🔍</button>
-            </div>
-        </section>
-
-        <!-- 결과 목록 영역 (JS로 채워질 곳) -->
-        <main class="results-area" id="resultsArea">
-            <!-- 데이터가 없을 때의 초기 상태 -->
-            <div class="empty-state">
-                <p>알고 싶은 책을 검색해 보세요!</p>
-            </div>
+        <main>
+            <section class="search-section">
+                <div class="search-box">
+                    <button id="searchBtn">🔍</button>
+                    <input type="text" id="searchInput" placeholder="도서를 검색해보세요">
+                </div>
+            </section>
+            <section class="recent-search">
+                <div class="recent-header">
+                    <h3>🕒 최근 검색</h3>
+                    <button class="clear-all-btn">전체 삭제</button>
+                </div>
+                <div class="recent-tags">
+                    <span class="recent-tag-item">사피엔스</span>
+                    <span class="recent-tag-item">사피엔스</span>
+                    <span class="recent-tag-item">사피엔스</span>
+                </div>
+                <div class="recent-tags-empty">검색 기록이 없습니다.</div>
+            </section>
+            <section class="favorites"></section>
+            <section class="recommendations"></section>
         </main>
+        <nav class="bottom-nav">
+            <a href="/">홈</a>
+            <a href="/favorites">검색</a>
+        </nav>
     </div>
 
-    <!-- JS 로직은 나중에 사용자님이 직접! -->
-    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
 </body>
 
 </html>
