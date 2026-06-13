@@ -47,3 +47,56 @@
     color: #888888;
     display: block;
 }
+
+.favorites {
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f7;
+    padding: 20px;
+    flex-grow: 1;
+    padding-bottom: 80px;
+}
+
+.favorites h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.favorites-books {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px 0;
+}
+
+.favorite-card {
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    height: 200px;
+    cursor: pointer;
+    padding: 8px 16px;
+}
+
+.favorite-card img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.favorite-card .favorite-title {
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 8px;
+}
+
+.favorite-card .favorite-author {
+    font-size: 12px;
+    font-weight: 300;
+    color: #888888;
+}

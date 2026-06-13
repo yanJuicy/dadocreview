@@ -40,8 +40,27 @@
                 </div>
                 <div class="recent-tags-empty">검색 기록이 없습니다.</div>
             </section>
-            <section class="favorites"></section>
-            <section class="recommendations"></section>
+            <section class="favorites">
+                <h3>⭐ 즐겨찾기</h3>
+                <div class="favorites-books">
+                    <div class="favorite-card">
+                        <img src="{{ url_for('static', path='/images/book-example.jpg') }}" alt="">
+                        <span class="favorite-title">책 제목</span>
+                        <span class="favorite-author">저자</span>
+                    </div>
+                    <div class="favorite-card">
+                        <img src="{{ url_for('static', path='/images/book-example.jpg') }}" alt="">
+                        <span class="favorite-title">책 제목</span>
+                        <span class="favorite-author">저자</span>
+                    </div>
+                    <div class="favorite-card">
+                        <img src="" alt="">
+                        <span class="favorite-title">책 제목</span>
+                        <span class="favorite-author">저자</span>
+                    </div>
+                    <div class="favorites-empty">즐겨찾기한 책이 없습니다.</div>
+                </div>
+            </section>
         </main>
         <nav class="bottom-nav">
             <a href="/" class="nav-item active">
