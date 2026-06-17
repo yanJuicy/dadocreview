@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>검색 - 도도리</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/search.css') }}">
+</head>
+
+<body>
+    <div class="app-container">
+        <main>
+            <section class="search-section">
+                <div class="search-box">
+                    <button id="searchBtn">🔍</button>
+                    <input type="text" id="searchInput" placeholder="도서를 검색해보세요">
+                </div>
+            </section>
+            <section class="recent-search">
+                <div class="recent-header">
+                    <h3>🕒 최근 검색어</h3>
+                </div>
+                <div class="recent-tags">
+                    <span class="recent-tag-item">사피엔스</span>
+                    <span class="recent-tag-item">사피엔스</span>
+                    <span class="recent-tag-item">사피엔스</span>
+                </div>
+                <div class="recent-tags-empty">검색 기록이 없습니다.</div>
+            </section>
+            <section class="popular">
+                <div class="popoular-header">
+                    <h3>🔥 인기 검색어</h3>
+                </div>
+                <div class="popular-list">
+                    <div class="popular-item">
+                        <div class="popular-rank">1</div>
+                        <div class="popular-keyword">사피엔스</div>
+                        <div class="popular-change">+3</div>
+                    </div>
+                    <div class="popular-item">
+                        <div class="popular-rank">2</div>
+                        <div class="popular-keyword">사피엔스</div>
+                        <div class="popular-change">+3</div>
+                    </div>
+                    <div class="popular-item">
+                        <div class="popular-rank">3</div>
+                        <div class="popular-keyword">사피엔스</div>
+                        <div class="popular-change">+3</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <nav class="bottom-nav">
+            <a href="/" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">홈</span>
+            </a>
+            <a href="/search" class="nav-item active">
+                <span class="nav-icon">🔍</span>
+                <span class="nav-label">검색</span>
+            </a>
+        </nav>
+    </div>
+</body>
+
+</html>

@@ -91,3 +91,8 @@ def search_libraries(request: Request, q: str = None, db: Session = Depends(get_
         return []
     libraries = crud.search_libraries(db, q)
     return libraries
+
+
+@app.get("/search", response_class=HTMLResponse)
+def search_page(request: Request):
+    return templates.TemplateResponse(request, "search.html")
