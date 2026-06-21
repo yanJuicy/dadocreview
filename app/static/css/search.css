@@ -1,0 +1,89 @@
+.recent-search {
+    padding: 20px 16px;
+    border-top: 2px solid #f5f5f7;
+}
+
+.recent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.recent-header h3 {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.recent-header span {
+    font-size: 12px;
+    color: grey;
+    cursor: pointer;
+}
+
+.recent-tags {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.recent-tag-item {
+    background-color: #f5f5f7;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #4c4c4c;
+    cursor: pointer;
+}
+
+.recent-tags-empty {
+    font-size: 16px;
+    font-weight: 400;
+    color: #888888;
+}
+
+.popular-search {
+    padding: 20px 16px;
+}
+
+.popular-header h3 {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.popular-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.popular-items-line {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.popular-item {
+    display: flex;
+    flex-grow: 1;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.popular-item :hover {
+    cursor: pointer;
+}
+
+.popular-item:hover .popular-keyword {
+    color: black;
+    font-weight: 600;
+}
+
+.popular-rank {
+    color: blueviolet;
+}
+
+.popular-keyword {
+    color: #4c4c4c;
+}
