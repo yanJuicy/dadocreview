@@ -3,7 +3,7 @@
 }
 
 .result-list {
-    padding: 20px 80px;
+    padding: 20px 16px;
 }
 
 .result-item {
@@ -15,6 +15,7 @@
 
 .result-item img {
     width: 100px;
+    flex-shrink: 0;
 }
 
 .book-info {
