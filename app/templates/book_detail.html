@@ -4,89 +4,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{book.title}}</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='css/common.css') }}">
+    <title>{{book.title}} - 도도리</title>
     <link rel="stylesheet" href="{{ url_for('static', path='css/book_detail.css') }}">
 </head>
 
 <body>
-    <header>
-        <div class="book-header">
-            <a href="">
-                <span>←</span>
-            </a>
-            <h2>{{book.title}}</h2>
-        </div>
-    </header>
-    <main>
-        <section class="book-info">
-            <div class="book-cover">
-                <img src="{{book.cover_image_url}}" alt="">
+    <div class="app-container">
+        <header>
+            <div class="book-header">
+                <a href="" class="back-btn">←</a>
+                <span class="header-title">{{book.title}}</span>
             </div>
-            <div class="book-details">
-                <h3>{{book.title}}</h3>
-                <p>{{book.author}}</p>
-                <p>{{book.publisher}}</p>
-                <p>{{book.publication_year}}</p>
-            </div>
-        </section>
-        <section class="stats-info">
-            <div class="stats-item">
-                <span>4.5</span>
-                <p>리뷰 <span>324</span>개</p>
-            </div>
-            <div class="stats-item">
-                <span>1,247</span>
-                <p>총 대출 횟수</p>
-            </div>
-        </section>
-        <section class="ai-section">
-            <h3>AI가 분석한 이 책의 핵심</h3>
-            <div class="ai-summary">
-                <p>{{book.ai_summary}}</p>
-            </div>
-        </section>
-        <section class="ai-review-list">
-            <div class="ai-review-pro">
-                <p>긍정 리뷰 요약</p>
-                <p>{{book.ai_review_pro}}</p>
-            </div>
-            <div class="ai-review-con">
-                <p>부정 리뷰 요약</p>
-                <p>{{book.ai_review_con}}</p>
-            </div>
-        </section>
-        <section class="book-index">
-            <h3>목차</h3>
-            <div>
-                <span>1장</span>
-                <span>2장</span>
-                <span>3장</span>
-                <span>4장</span>
-                <span>5장</span>
-            </div>
-        </section>
-        <section class="review-list">
-            <h3>독자 리뷰</h3>
-            <div>
-                <div class="review-item">
-                    <p>2020년 12월 11일</p>
-                    <p>별점: ⭐⭐⭐⭐</p>
-                    <p>리뷰 내용</p>
+        </header>
+        <main>
+            <section class="book-info">
+                <div class="book-cover">
+                    <img src="{{book.cover_image_url}}" alt="">
                 </div>
-                <div class="review-item">
-                    <p>2020년 12월 11일</p>
-                    <p>별점: ⭐⭐⭐⭐</p>
-                    <p>리뷰 내용</p>
+                <div class="book-details">
+                    <h3 class="book-title">{{book.title}}</h3>
+                    <span class="book-author">{{book.author}}</span>
+                    <div>
+                        <span class="book-publisher">{{book.publisher}}</span>
+                        <span class="book-pubdate">{{book.publication_year}}</span>
+                    </div>
                 </div>
-                <div class="review-item">
-                    <p>2020년 12월 11일</p>
-                    <p>별점: ⭐⭐</p>
-                    <p>리뷰 내용</p>
+            </section>
+            <section class="stats-info">
+                <div class="stats-item">
+                    <span class="stats-value">⭐ 4.5</span>
+                    <p class="stats-description">리뷰 <span>324</span>개</p>
                 </div>
-            </div>
-        </section>
-    </main>
+                <div class="stats-item">
+                    <span class="stats-value">📚 1,247</span>
+                    <p class="stats-description">총 대출 횟수</p>
+                </div>
+            </section>
+            <section class="ai-section">
+                <h3>✨ AI가 분석한 이 책의 핵심</h3>
+                <div class="ai-summary">
+                    <p>{{book.ai_summary}}</p>
+                </div>
+            </section>
+            <section class="ai-review-list">
+                <div class="ai-review-pro">
+                    <p>긍정 리뷰 요약</p>
+                    <p>{{book.ai_review_pro}}</p>
+                </div>
+                <div class="ai-review-con">
+                    <p>부정 리뷰 요약</p>
+                    <p>{{book.ai_review_con}}</p>
+                </div>
+            </section>
+
+            <section class="review-list">
+                <h3>💬 독자 리뷰</h3>
+                <div>
+                    <div class="review-item">
+                        <p>2020년 12월 11일</p>
+                        <p>별점: ⭐⭐⭐⭐</p>
+                        <p>리뷰 내용</p>
+                    </div>
+                    <div class="review-item">
+                        <p>2020년 12월 11일</p>
+                        <p>별점: ⭐⭐⭐⭐</p>
+                        <p>리뷰 내용</p>
+                    </div>
+                    <div class="review-item">
+                        <p>2020년 12월 11일</p>
+                        <p>별점: ⭐⭐</p>
+                        <p>리뷰 내용</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
 </body>
 
 </html>
