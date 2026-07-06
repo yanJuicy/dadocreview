@@ -20,15 +20,19 @@
             </section>
             <section class="results">
                 <div class="result-list">
-
+                    {% for book in books %}
                     <div class="result-item">
-                        <img src="{{ url_for('static', path='/images/book-example.jpg') }}" alt="">
+                        <a href="/books/{{book.id}}">
+                            <img src="{{ book.cover_image_url }}" alt="">
+                        </a>
                         <div class="book-info">
-                            <span class="book-title">책 제목</span>
+                            <a href="/books/{{book.id}}">
+                                <span class="book-title">{{ book.title }}</span>
+                            </a>
                             <div>
-                                저자 <span class="book-author">저자</span>
-                                출판 <span class="book-publisher">출판</span>
-                                날짜 <span class="book-pubdate">날짜</span>
+                                저자 <span class="book-author">{{ book.author }}</span>
+                                출판 <span class="book-publisher">{{ book.publisher }}</span>
+                                날짜 <span class="book-pubdate">{{ book.publication_date }}</span>
                             </div>
                             <div>
                                 <span class="book-rating">5.0</span>
@@ -40,142 +44,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="result-item">
-                        <img src="{{ url_for('static', path='/images/book-example.jpg') }}" alt="">
-                        <div class="book-info">
-                            <span class="book-title">책 제목</span>
-                            <div>
-                                저자 <span class="book-author">저자</span>
-                                출판 <span class="book-publisher">출판</span>
-                                날짜 <span class="book-pubdate">날짜</span>
-                            </div>
-                            <div>
-                                <span class="book-rating">5.0</span>
-                                <span class="book-review-counts">483개의 리뷰</span>
-                            </div>
-                            <div>
-                                <span class="book-ai-review-pro">AI 리뷰 긍정</span>
-                                <span class="book-ai-review-con">AI 리뷰 부정</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="result-item">
-                        <img src="{{ url_for('static', path='/images/book-example.jpg') }}" alt="">
-                        <div class="book-info">
-                            <span class="book-title">책 제목</span>
-                            <div>
-                                저자 <span class="book-author">저자</span>
-                                출판 <span class="book-publisher">출판</span>
-                                날짜 <span class="book-pubdate">날짜</span>
-                            </div>
-                            <div>
-                                <span class="book-rating">5.0</span>
-                                <span class="book-review-counts">483개의 리뷰</span>
-                            </div>
-                            <div>
-                                <span class="book-ai-review-pro">AI 리뷰 긍정</span>
-                                <span class="book-ai-review-con">AI 리뷰 부정</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="result-item">
-                        <img src="{{ url_for('static', path='/images/book-example.jpg') }}" alt="">
-                        <div class="book-info">
-                            <span class="book-title">책 제목</span>
-                            <div>
-                                저자 <span class="book-author">저자</span>
-                                출판 <span class="book-publisher">출판</span>
-                                날짜 <span class="book-pubdate">날짜</span>
-                            </div>
-                            <div>
-                                <span class="book-rating">5.0</span>
-                                <span class="book-review-counts">483개의 리뷰</span>
-                            </div>
-                            <div>
-                                <span class="book-ai-review-pro">AI 리뷰 긍정</span>
-                                <span class="book-ai-review-con">AI 리뷰 부정</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="result-item">
-                        <img src="{{ url_for('static', path='/images/book-example.jpg') }}" alt="">
-                        <div class="book-info">
-                            <span class="book-title">책 제목</span>
-                            <div>
-                                저자 <span class="book-author">저자</span>
-                                출판 <span class="book-publisher">출판</span>
-                                날짜 <span class="book-pubdate">날짜</span>
-                            </div>
-                            <div>
-                                <span class="book-rating">5.0</span>
-                                <span class="book-review-counts">483개의 리뷰</span>
-                            </div>
-                            <div>
-                                <span class="book-ai-review-pro">AI 리뷰 긍정</span>
-                                <span class="book-ai-review-con">AI 리뷰 부정</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="result-item">
-                        <img src="{{ url_for('static', path='/images/book-example.jpg') }}" alt="">
-                        <div class="book-info">
-                            <span class="book-title">책 제목</span>
-                            <div>
-                                저자 <span class="book-author">저자</span>
-                                출판 <span class="book-publisher">출판</span>
-                                날짜 <span class="book-pubdate">날짜</span>
-                            </div>
-                            <div>
-                                <span class="book-rating">5.0</span>
-                                <span class="book-review-counts">483개의 리뷰</span>
-                            </div>
-                            <div>
-                                <span class="book-ai-review-pro">AI 리뷰 긍정</span>
-                                <span class="book-ai-review-con">AI 리뷰 부정</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="result-item">
-                        <img src="{{ url_for('static', path='/images/book-example.jpg') }}" alt="">
-                        <div class="book-info">
-                            <span class="book-title">책 제목</span>
-                            <div>
-                                저자 <span class="book-author">저자</span>
-                                출판 <span class="book-publisher">출판</span>
-                                날짜 <span class="book-pubdate">날짜</span>
-                            </div>
-                            <div>
-                                <span class="book-rating">5.0</span>
-                                <span class="book-review-counts">483개의 리뷰</span>
-                            </div>
-                            <div>
-                                <span class="book-ai-review-pro">AI 리뷰 긍정</span>
-                                <span class="book-ai-review-con">AI 리뷰 부정</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="result-item">
-                        <img src="{{ url_for('static', path='/images/book-example.jpg') }}" alt="">
-                        <div class="book-info">
-                            <span class="book-title">책 제목</span>
-                            <div>
-                                저자 <span class="book-author">저자</span>
-                                출판 <span class="book-publisher">출판</span>
-                                날짜 <span class="book-pubdate">날짜</span>
-                            </div>
-                            <div>
-                                <span class="book-rating">5.0</span>
-                                <span class="book-review-counts">483개의 리뷰</span>
-                            </div>
-                            <div>
-                                <span class="book-ai-review-pro">AI 리뷰 긍정</span>
-                                <span class="book-ai-review-con">AI 리뷰 부정</span>
-                            </div>
-                        </div>
-                    </div>
-
+                    {% endfor %}
                 </div>
-
             </section>
             <section class="paging">
                 <a>이전</a>
