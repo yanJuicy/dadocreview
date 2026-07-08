@@ -7,6 +7,7 @@
     <title>{{keyword}} 검색 결과 - 도도리</title>
     <link rel="stylesheet" href="{{ url_for('static', path='/css/common.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', path='/css/results.css') }}">
+    <script src="{{ url_for('static', path='/js/results.js') }}" defer></script>
 </head>
 
 <body>
@@ -48,13 +49,11 @@
                 </div>
             </section>
             <section class="paging">
-                <a>이전</a>
-                <a>1</a>
-                <a>2</a>
-                <a>3</a>
-                <a>4</a>
-                <a>5</a>
-                <a>다음</a>
+                {% if page > 1 %}
+                <a href="?q={{keyword}}&page={{page-1}}">이전</a>
+                {% endif %}
+                <span>{{page}}</span>
+                <a href="?q={{keyword}}&page={{page+1}}">다음</a>
             </section>
         </main>
         <nav class="bottom-nav">
